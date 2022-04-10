@@ -13,6 +13,10 @@ contract Election {
 
     uint256 public candidatesCount;
 
+    event votedEvent (
+        uint256 indexed _candidateId
+    );
+
     constructor() public {
         addCandidate("youssef");
         addCandidate("hamdi");
@@ -33,5 +37,7 @@ contract Election {
         voters[msg.sender] = true;
 
         candidates[_candidateId].voteCount ++;
+
+        emit votedEvent(_candidateId);
     }
 }

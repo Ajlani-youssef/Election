@@ -37,9 +37,9 @@ contract("Election" , function (accounts){
           candidateId = 1;
           return electionInstance.vote(candidateId, { from: accounts[0] });
         }).then(function(receipt) {
-          // assert.equal(receipt.logs.length, 1, "an event was triggered");
-          // assert.equal(receipt.logs[0].event, "votedEvent", "the event type is correct");
-          // assert.equal(receipt.logs[0].args._candidateId.toNumber(), candidateId, "the candidate id is correct");
+          assert.equal(receipt.logs.length, 1, "an event was triggered");
+          assert.equal(receipt.logs[0].event, "votedEvent", "the event type is correct");
+          assert.equal(receipt.logs[0].args._candidateId.toNumber(), candidateId, "the candidate id is correct");
           return electionInstance.voters(accounts[0]);
         }).then(function(voted) {
           assert(voted, "the voter was marked as voted");
@@ -72,10 +72,10 @@ contract("Election" , function (accounts){
       });
     
       it("throws an exception for double voting", function() {
-        return Election.deployed().then(function(instance) {
+        return Election.deployed().then(async function(instance)  {
           electionInstance = instance;
           candidateId = 2;
-          electionInstance.vote(candidateId, { from: accounts[1] });
+         await electionInstance.vote(candidateId, { from: accounts[1] });
           return electionInstance.candidates(candidateId);
         }).then(function(candidate) {
           var voteCount = candidate[2];
